@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { markGoalCompleted } from '../../features/create-goals-completions';
+import { markGoalCompleted } from '../../features/create-completed-goals';
 
 export const createGoalCompletedRoute: FastifyPluginAsyncZod = async (app) => {
   app.post('/goals-completed', {

@@ -32,7 +32,7 @@ export async function getWeekSummary() {
     .innerJoin(goals, eq(goals.id, completedGoals.goalId))
     .where(and(
       gte(goals.createdAt, firstDayOfWeek),
-      lte(goals.createdAt, lastDayOfWeek)
+      lte(goals.createdAt, lastDayOfWeek),
     ))
   )
 
@@ -50,7 +50,7 @@ export async function getWeekSummary() {
       `.as('completed'),
     })
     .from(goalsCompletedInWeek)
-    .groupBy(goalsCompletedInWeek.completedAtDate)
+    .groupBy(goalsCompletedInWeek.completedAtDate),
   )
 
   const result = await db

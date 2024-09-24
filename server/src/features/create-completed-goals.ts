@@ -26,7 +26,7 @@ export async function markGoalCompleted ({
       lte(goals.createdAt, lastDayOfWeek),
       eq(goals.id, goalId)
     ))
-    .groupBy(completedGoals.goalId)
+    .groupBy(completedGoals.goalId),
   )
 
   const result = await db
