@@ -1,7 +1,7 @@
 <h1 align="center"> Inorbit </h1>
 
 <p align="center">
-  <img alt="exemple of summary page" src=".github/summit.png">
+  <img alt="exemple of summary page" src=".github/summary_page.png">
 </p>
 
 <p align="center"> Project developed during the NLW Pocket JS, by Rocketseat.</p>
