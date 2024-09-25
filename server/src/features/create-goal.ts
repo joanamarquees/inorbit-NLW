@@ -1,4 +1,4 @@
-import { db } from '../db'
+import { db } from '../db/index'
 import { goals } from '../db/schema'
 
 interface CreateGoalRequest {

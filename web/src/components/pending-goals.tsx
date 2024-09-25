@@ -35,7 +35,7 @@ const queryClient = useQueryClient()
               onClick={() => handleCompleteGoal(goal.id)}
             >
               <Plus className="size-4 text-zinc-600"/>
-              goal.title
+              {goal.title}
             </OutlineButton>
           )
         })}

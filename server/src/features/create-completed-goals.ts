@@ -1,30 +1,32 @@
 import{ and,  lte, gte, count, eq, sql } from "drizzle-orm"
-import { db } from '../db'
+import { db } from '../db/index'
 import { completedGoals, goals } from '../db/schema'
 import dayjs from 'dayjs'
-import { error } from "console"
+import isoWeek from "dayjs/plugin/isoWeek";
 
+dayjs.extend(isoWeek);
 
 interface MarkGoalCompletedRequest {
   goalId: string
 }
 
 export async function markGoalCompleted ({
-  goalId
+  goalId,
 }: MarkGoalCompletedRequest) {
-  const firstDayOfWeek = dayjs().startOf('week').toDate()
-  const lastDayOfWeek = dayjs().endOf('week').toDate()
+  const firstDayOfWeek = dayjs().startOf('isoWeek').toDate()
+  const lastDayOfWeek = dayjs().endOf('isoWeek').toDate()
 
   const completedGoalsCount = db.$with('completed_goals_count').as(
     db.select({
       goalId: completedGoals.goalId,
-      count: count(completedGoals.goalId),
+      count: count(completedGoals.goalId).as('count'),
     })
     .from(completedGoals)
+    .innerJoin(goals, eq(goals.id, completedGoals.goalId)) // Include goals table here
     .where(and(
+      eq(completedGoals.goalId, goalId),
       gte(goals.createdAt, firstDayOfWeek),
       lte(goals.createdAt, lastDayOfWeek),
-      eq(goals.id, goalId)
     ))
     .groupBy(completedGoals.goalId),
   )
@@ -35,7 +37,7 @@ export async function markGoalCompleted ({
     desiredWeeklyFrequency: goals.desiredWeeklyFrequency,
     completedCount: sql`
       COALESCE(${completedGoalsCount.count}, 0)
-    `.mapWith(Number),
+    `.mapWith(Number)
   })
   .from(goals)
   .leftJoin(completedGoalsCount, eq(completedGoalsCount.goalId, goals.id))
